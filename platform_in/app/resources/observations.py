@@ -66,19 +66,22 @@ class SolarInverterObservation(Resource):
         """
         try:
             data = request.get_json()
+            data = json.loads(data)
+            #print(request.headers)
             logging.info(f"post observation: {data}")
-            print(data)
+            #print("post data for solar inverter", data)
+            #print("inverter name", data["name"])
         
             inverter_name = data["name"]
             topic_prefix = "test.sputhan.finest.viikkisolar"
 
             topic = f"{topic_prefix}.{inverter_name}"
-            print(topic)
+            #print(topic)
             kafka_produce_peoplecounter_data(topic, json.dumps(data))
             return success_response_object,success_code
 
         except Exception as e:
-            print("xml error", e)
+            print("solar inverter error", e)
             return failure_response_object,failure_code
 
 
