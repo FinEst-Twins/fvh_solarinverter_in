@@ -19,7 +19,7 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # set up extensions
-    #elastic_apm.init_app(app)
+    elastic_apm.init_app(app)
 
     from app.resources.observations import observations_blueprint
     app.register_blueprint(observations_blueprint)

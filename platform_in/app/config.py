@@ -18,13 +18,6 @@ class Config(object):
     DEBUG = True
     CSRF_ENABLED = True
 
-    WTF_CSRF_ENABLED = True
-    REDIS_URL = "redis://redis:6379/0"
-    QUEUES = ["default"]
-
-    KAFKA_BROKERLIST = os.environ.get("KAFKA_BROKERLIST") or "host.docker.internal:9092"
-    # SWAGGER = {'swagger'}
-
     SASL_UNAME = get_env_variable("SASL_UNAME")
     SASL_PASSWORD = get_env_variable("SASL_PASSWORD")
     KAFKA_BROKERS = get_env_variable("KAFKA_BROKERS")
