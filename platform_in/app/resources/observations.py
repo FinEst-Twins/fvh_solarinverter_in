@@ -13,6 +13,11 @@ from confluent_kafka.avro import AvroProducer
 
 observations_blueprint = Blueprint("observations", __name__)
 api = Api(observations_blueprint)
+success_response_object = {"status": "success"}
+success_code = 202
+failure_response_object = {"status": "failure"}
+failure_code = 400
+
 
 def get_kafka_producer():
     return Producer(
@@ -26,72 +31,55 @@ def get_kafka_producer():
         }
     )
 
-class PeopleCounterObservation(Resource):
-    def post(self):
-        """
-        Post new observation
-        """
-        data = request.get_json()
-        logging.info(f"post observation: {data}")
-        print(data)
-        
-        #kafka_producer = get_kafka_producer()
 
-    #     try:
-
-    #         #kafka_producer.produce(
-    #         #    f"{topic_prefix}.{topic}", json.dumps(observations), callback=delivery_report
-    #         #)
-    #         #kafka_producer.poll(2)
-    # except BufferError:
-    #     logging.error("local buffer full", len(kafka_producer))
-    #     elastic_apm.capture_exception()
-    #     return False
-    # except Exception as e:
-    #     elastic_apm.capture_exception()
-    #     logging.error(e)
-    #     return False
-    
-    # return True
-        response_object = {"status": "received"}
-        return response_object, 200
+def delivery_report(err, msg):
+    if err is not None:
+        logging.error(f"Message delivery failed: {err}")
+    else:
+        logging.debug(f"Message delivered to {msg.topic()} [{msg.partition()}]")
 
 
-api.add_resource(PeopleCounterObservation, "/peoplecounter/v1")
+def kafka_produce_peoplecounter_data(topic, jsonstring):
+
+    kafka_producer = get_kafka_producer()
+
+    try:
+        kafka_producer.produce(
+            topic, jsonstring, callback=delivery_report
+        )
+        kafka_producer.poll(2)
+    except BufferError:
+        logging.error("local buffer full", len(kafka_producer))
+        elastic_apm.capture_exception()
+        return False
+    except Exception as e:
+        elastic_apm.capture_exception()
+        logging.error(e)
+        return False
 
 
 class SolarInverterObservation(Resource):
     def post(self):
         """
         Post new observation
+
         """
-        data = request.get_json()
-        logging.info(f"post observation: {data}")
-        print(data)
+        try:
+            data = request.get_json()
+            logging.info(f"post observation: {data}")
+            print(data)
         
-        #kafka_producer = get_kafka_producer()
+            inverter_name = data["name"]
+            topic_prefix = "test.sputhan.finest.viikkisolar"
 
-    #     try:
+            topic = f"{topic_prefix}.{inverter_name}"
+            print(topic)
+            kafka_produce_peoplecounter_data(topic, json.dumps(data))
+            return success_response_object,success_code
 
-    #         #kafka_producer.produce(
-    #         #    f"{topic_prefix}.{topic}", json.dumps(observations), callback=delivery_report
-    #         #)
-    #         #kafka_producer.poll(2)
-    # except BufferError:
-    #     logging.error("local buffer full", len(kafka_producer))
-    #     elastic_apm.capture_exception()
-    #     return False
-    # except Exception as e:
-    #     elastic_apm.capture_exception()
-    #     logging.error(e)
-    #     return False
-    
-    # return True
-        response_object = {"status": "received"}
-        return response_object, 200
+        except Exception as e:
+            print("xml error", e)
+            return failure_response_object,failure_code
 
 
 api.add_resource(SolarInverterObservation, "/viikkisolar/observation")
-
-
-
