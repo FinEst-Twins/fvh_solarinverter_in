@@ -15,7 +15,7 @@ prod config (nginx+gunicorn)
 
 2,3,4 same as previous but port for prod is 1337
 POST data example:
-´´´json
+```json
 {
 	"name": "Inv6",
 	"timestamp": "2020-04-20T17:56:50.093538",
@@ -43,4 +43,3 @@ POST data example:
 	"Status": 0,
 	"Fault": 0
 }
-´´´
