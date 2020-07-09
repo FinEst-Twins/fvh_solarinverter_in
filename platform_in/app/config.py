@@ -23,7 +23,7 @@ class Config(object):
     KAFKA_BROKERS = get_env_variable("KAFKA_BROKERS")
     SECURITY_PROTOCOL = get_env_variable("SECURITY_PROTOCOL")
     SASL_MECHANISM = get_env_variable("SASL_MECHANISM")
-      SCHEMA_REGISTRY_URL = get_env_variable("SCHEMA_REGISTRY_URL")
+    SCHEMA_REGISTRY_URL = get_env_variable("SCHEMA_REGISTRY_URL")
 
     ELASTIC_APM = {
         'SERVICE_NAME': get_env_variable("ELASTIC_SERVICE_NAME"),

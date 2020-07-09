@@ -51,7 +51,7 @@ def create_app(script_info=None):
     # set up extensions
     elastic_apm.init_app(app)
 
-    value_schema = avro.load("avro/sentilonoise.avsc")
+    value_schema = avro.load("avro/solarinverter.avsc")
     avroProducer = AvroProducer(
         {
             "bootstrap.servers": app.config["KAFKA_BROKERS"],
@@ -81,17 +81,15 @@ def create_app(script_info=None):
         try:
             data = request.get_json()
             data = json.loads(data)
-            #print(request.headers)
-            logging.info(f"post observation: {data}")
+            #print(data)
+            logging.debug(f"post observation: {data}")
             #print("post data for solar inverter", data)
-            #print("inverter name", data["name"])
         
             inverter_name = data["name"]
-            topic_prefix = "test.finest.viikkisolar"
+            topic_prefix = "finest.viikkisolar"
 
             topic = f"{topic_prefix}.{inverter_name}"
-            #print(topic)
-            kafka_produce_peoplecounter_data(topic, json.dumps(data))
+            kafka_avro_produce(avroProducer, topic, data)
             return success_response_object,success_code
 
         except Exception as e:

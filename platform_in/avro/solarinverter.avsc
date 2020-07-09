@@ -1,0 +1,107 @@
+{
+  "name": "solarinverter",
+  "type": "record",
+  "namespace": "com.fvh.avro",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "VoltageString1",
+      "type": "double"
+    },
+    {
+      "name": "CurrentString1",
+      "type": "double"
+    },
+    {
+      "name": "OutputString1",
+      "type": "int"
+    },
+    {
+      "name": "VoltageString2",
+      "type": "double"
+    },
+    {
+      "name": "CurrentString2",
+      "type": "double"
+    },
+    {
+      "name": "OutputString2",
+      "type": "int"
+    },
+    {
+      "name": "VoltageString3",
+      "type": "double"
+    },
+    {
+      "name": "CurrentString3",
+      "type": "double"
+    },
+    {
+      "name": "OutputString3",
+      "type": "int"
+    },
+    {
+      "name": "VoltagePhase1",
+      "type": "double"
+    },
+    {
+      "name": "CurrentPhase1",
+      "type": "double"
+    },
+    {
+      "name": "OutputPhase1",
+      "type": "int"
+    },
+    {
+      "name": "VoltagePhase2",
+      "type": "double"
+    },
+    {
+      "name": "CurrentPhase2",
+      "type": "double"
+    },
+    {
+      "name": "OutputPhase2",
+      "type": "int"
+    },
+    {
+      "name": "VoltagePhase3",
+      "type": "double"
+    },
+    {
+      "name": "CurrentPhase3",
+      "type": "double"
+    },
+    {
+      "name": "OutputPhase3",
+      "type": "int"
+    },
+    {
+      "name": "TotalEnergy",
+      "type": "int"
+    },
+    {
+      "name": "DailyEnery",
+      "type": "int"
+    },
+    {
+      "name": "Status",
+      "type": "int"
+    },
+    {
+      "name": "Fault",
+      "type": "int"
+    }
+  ]
+}
