@@ -14,6 +14,8 @@ prod config (nginx+gunicorn)
     docker-compose -f docker-compose.prod.yml up
 
 2,3,4 same as previous but port for prod is 1337
+
+
 POST data example:
 ```json
 {
