@@ -62,7 +62,7 @@ def create_app(script_info=None):
             "ssl.ca.location": certifi.where(),
             #"debug": "security,cgrp,fetch,topic,broker,protocol",
             "on_delivery": delivery_report,
-            "schema.registry.url": app.config["SCHEMA_REGISTRY_URL"] 
+            "schema.registry.url": app.config["SCHEMA_REGISTRY_URL"]
         },
         default_value_schema=value_schema,
     )
@@ -71,7 +71,7 @@ def create_app(script_info=None):
     @app.shell_context_processor
     def ctx():
         return {"app": app}
-    
+
     @app.route("/")
     def hello_world():
         return jsonify(health="ok")
@@ -84,7 +84,7 @@ def create_app(script_info=None):
             #print(data)
             logging.debug(f"post observation: {data}")
             #print("post data for solar inverter", data)
-        
+
             inverter_name = data["name"]
             topic_prefix = "finest.viikkisolar"
 

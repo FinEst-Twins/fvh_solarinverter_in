@@ -6,7 +6,7 @@ Note: the environment variables file config.env must be at root folder and the s
 dev config (flask dev server):
 
     docker-compose up
-    send PUT requests to localhost:5000/cesva/v1 with sentilo noise data
+    send PUT requests to localhost:5000/viikkisolar/observation with solar inverter data
     should return success or failure response
 
 prod config (nginx+gunicorn)
