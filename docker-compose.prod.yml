@@ -3,7 +3,7 @@ version: '3'
 services:
 
   solarinverter_in_api:
-    build: 
+    build:
         context: ./platform_in/
         dockerfile: Dockerfile.prod
     command: gunicorn --bind 0.0.0.0:5003 manage:app
@@ -23,4 +23,4 @@ services:
     ports:
       - 1337:80
     depends_on:
-      - peoplecounter_in_api
+      - solarinverter_in_api

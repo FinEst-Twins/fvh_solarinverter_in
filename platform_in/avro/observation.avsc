@@ -1,0 +1,102 @@
+{
+    "type": "record",
+    "name": "observation",
+    "namespace": "finest_platform",
+    "fields": [
+        {
+            "name": "phenomenontime_begin",
+            "type": [
+                "null",
+                {
+                    "type": "long",
+                    "logicalType": "timestamp-millis"
+                }
+            ],
+            "default": null
+        },
+        {
+            "name": "phenomenontime_end",
+            "type": [
+                "null",
+                {
+                    "type": "long",
+                    "logicalType": "timestamp-millis"
+                }
+            ],
+            "default": null
+        },
+        {
+            "name": "resulttime",
+            "type": [
+                "null",
+                {
+                    "type": "long",
+                    "logicalType": "timestamp-millis"
+                }
+            ],
+            "default": null
+        },
+        {
+            "name": "result",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        },
+        {
+            "name": "resultquality",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        },
+        {
+            "name": "validtime_begin",
+            "type": [
+                "null",
+                {
+                    "type": "long",
+                    "logicalType": "timestamp-millis"
+                }
+            ],
+            "default": null
+        },
+        {
+            "name": "validtime_end",
+            "type": [
+                "null",
+                {
+                    "type": "long",
+                    "logicalType": "timestamp-millis"
+                }
+            ],
+            "default": null
+        },
+        {
+            "name": "parameters",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        },
+        {
+            "name": "datastream_id",
+            "type": [
+                "null",
+                "long"
+            ],
+            "default": null
+        },
+        {
+            "name": "featureofintrest_link",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        }
+    ]
+}
