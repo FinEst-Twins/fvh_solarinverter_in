@@ -8,6 +8,7 @@ from confluent_kafka import avro
 from confluent_kafka.avro import AvroProducer
 import certifi
 from datetime import datetime
+import requests
 
 logging.basicConfig(level=logging.INFO)
 elastic_apm = ElasticAPM()
@@ -45,34 +46,49 @@ def kafka_avro_produce(avroProducer, topic, data):
 
 def get_ds_id(thing, sensor):
 
-    things = ["Inv1", "Inv2", "Inv3", "Inv4", "Inv5", "Inv6", "Inv7", "Inv8"]
-    sensors = [
-        "VoltagePhase1",
-        "VoltagePhase2",
-        "VoltagePhase3",
-        "VoltageString1",
-        "CurrentString1",
-        "OutputString1",
-        "VoltageString2",
-        "CurrentString2",
-        "OutputString2",
-        "VoltageString3",
-        "CurrentString3",
-        "OutputString3",
-        "CurrentPhase1",
-        "OutputPhase1",
-        "CurrentPhase2",
-        "OutputPhase2",
-        "CurrentPhase3",
-        "OutputPhase3",
-        "TotalEnergy",
-        "DailyEnery",
-        "Status",
-        "Fault",
-    ]
+    # things = ["Inv1", "Inv2", "Inv3", "Inv4", "Inv5", "Inv6", "Inv7", "Inv8"]
+    # sensors = [
+    #     "VoltagePhase1",
+    #     "VoltagePhase2",
+    #     "VoltagePhase3",
+    #     "VoltageString1",
+    #     "CurrentString1",
+    #     "OutputString1",
+    #     "VoltageString2",
+    #     "CurrentString2",
+    #     "OutputString2",
+    #     "VoltageString3",
+    #     "CurrentString3",
+    #     "OutputString3",
+    #     "CurrentPhase1",
+    #     "OutputPhase1",
+    #     "CurrentPhase2",
+    #     "OutputPhase2",
+    #     "CurrentPhase3",
+    #     "OutputPhase3",
+    #     "TotalEnergy",
+    #     "DailyEnery",
+    #     "Status",
+    #     "Fault",
+    # ]
 
-    datastreams = list([(a, b) for a in things for b in sensors])
-    return datastreams.index((thing, sensor)) + 89
+    # datastreams = list([(a, b) for a in things for b in sensors])
+    # return datastreams.index((thing, sensor)) + 89
+
+    payload = {'thing': thing, 'sensor': sensor}
+    print(payload)
+    resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
+    #resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+    print(resp.json())
+
+    ds = resp.json()['Datastreams']
+    if (len(ds) == 1):
+        return ds[0]["datastream_id"]
+    else:
+        return -1
+
+
+
 
 
 def create_app(script_info=None):
@@ -118,16 +134,17 @@ def create_app(script_info=None):
         try:
             data = request.get_json()
             data = json.loads(data)
-            # print(data)
+            #print(data)
             logging.debug(f"post observation: {data}")
             # print("post data for solar inverter", data)
 
             topic_prefix = "finest-observations-viikkisolar"
 
-            thing = data["name"]
+            thing = f"ViikkiSolar-{data['name']}"
             timestamp = data["timestamp"]
             dt_obj = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
             timestamp_millisec = round(dt_obj.timestamp() * 1000)
+
             del data["name"]
             del data["timestamp"]
             del data["type"]
@@ -136,7 +153,7 @@ def create_app(script_info=None):
             # for in keys
             # query with inverter 1 and voltage string 1
             # avro produce to obs with id
-            print(data)
+            #print(data)
             for key, value in data.items():
                 sensor = key
                 # print(sensor)
