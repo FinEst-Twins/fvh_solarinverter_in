@@ -18,11 +18,13 @@ success_code = 202
 failure_response_object = {"status": "failure"}
 failure_code = 400
 
+
 def delivery_report(err, msg):
     if err is not None:
         logging.error(f"Message delivery failed: {err}")
     else:
         logging.debug(f"Message delivered to {msg.topic()} [{msg.partition()}]")
+
 
 def kafka_avro_produce(avroProducer, topic, data):
 
@@ -47,21 +49,18 @@ def get_ds_id(thing, sensor):
     requests the datastream id corresponding to the thing and sensor links given
     returns -1 if not found
     """
-    payload = {'thing': thing, 'sensor': sensor}
+    payload = {"thing": thing, "sensor": sensor}
     logging.debug(f"getting datastream id {payload}")
     resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
-    #resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
-    #print(resp.json())
+    # resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+    # print(resp.json())
     logging.debug(f"response: {resp.json()} ")
 
-    ds = resp.json()['Datastreams']
-    if (len(ds) == 1):
+    ds = resp.json()["Datastreams"]
+    if len(ds) == 1:
         return ds[0]["datastream_id"]
     else:
         return -1
-
-
-
 
 
 def create_app(script_info=None):
@@ -107,7 +106,7 @@ def create_app(script_info=None):
         try:
             data = request.get_json()
             data = json.loads(data)
-            #print(data)
+            # print(data)
             logging.debug(f"post observation: {data}")
 
             topic_prefix = "finest-observations-viikkisolar"
@@ -125,7 +124,7 @@ def create_app(script_info=None):
                 sensor = key
                 # print(sensor)
                 ds_id = get_ds_id(thing, sensor)
-                if (ds_id == -1):
+                if ds_id == -1:
                     logging.warning(f"no datastream id found for {thing} + {sensor}")
                 topic = f"{topic_prefix}"
                 observation = {
@@ -146,7 +145,7 @@ def create_app(script_info=None):
 
         except Exception as e:
             avroProducer.flush()
-            logging.error('Error at %s', 'data to kafka', exc_info=e)
+            logging.error("Error at %s", "data to kafka", exc_info=e)
             return failure_response_object, failure_code
 
     return app
