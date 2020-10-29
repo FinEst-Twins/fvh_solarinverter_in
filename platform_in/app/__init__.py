@@ -16,6 +16,7 @@ success_code = 202
 failure_response_object = {"status": "failure"}
 failure_code = 400
 
+
 def get_ds_id(thing, sensor):
     """
     requests the datastream id corresponding to the thing and sensor links given
@@ -24,7 +25,7 @@ def get_ds_id(thing, sensor):
     payload = {"thing": thing, "sensor": sensor}
     logging.debug(f"getting datastream id {payload}")
     resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
-    #resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+    # resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
     # print(resp.json())
     logging.debug(f"response: {resp.json()} ")
 
@@ -61,10 +62,10 @@ def create_app(script_info=None):
     def post_solarinverter_data():
         try:
             data = request.get_json()
-            #uncomment for prod
+            # uncomment for prod
             data = json.loads(data)
             # print(data)
-            logging.info(f"post observation: {data}")
+            # ogging.info(f"post observation: {data}")
 
             topic_prefix = "finest-observations-viikkisolar"
 
@@ -74,7 +75,6 @@ def create_app(script_info=None):
             phenomenon_timestamp_millisec = round(dt_obj.timestamp() * 1000)
             dt_obj = datetime.utcnow()
             result_timestamp_millisec = round(dt_obj.timestamp() * 1000)
-
 
             del data["name"]
             del data["timestamp"]
@@ -99,7 +99,7 @@ def create_app(script_info=None):
                     "datastream_id": ds_id,
                     "featureofintrest_link": None,
                 }
-                logging.info(observation)
+                # logging.info(observation)
 
                 payload = {"topic": topic, "observation": observation}
 
@@ -109,7 +109,7 @@ def create_app(script_info=None):
                     data=json.dumps(payload),
                     headers=headers,
                 )
-                #resp = requests.post("http://host.docker.internal:1337/observation", data=json.dumps(payload), headers=headers)
+                # resp = requests.post("http://host.docker.internal:1337/observation", data=json.dumps(payload), headers=headers)
 
             return success_response_object, success_code
 
