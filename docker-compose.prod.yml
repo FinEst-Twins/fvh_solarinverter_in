@@ -21,6 +21,6 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - 1337:80
+      - 1339:80
     depends_on:
       - solarinverter_in_api
