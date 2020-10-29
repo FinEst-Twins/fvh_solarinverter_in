@@ -8,6 +8,7 @@ from confluent_kafka import avro
 from confluent_kafka.avro import AvroProducer
 import certifi
 from datetime import datetime
+from datetime import timezone
 import requests
 
 logging.basicConfig(level=logging.INFO)
@@ -51,8 +52,8 @@ def get_ds_id(thing, sensor):
     """
     payload = {"thing": thing, "sensor": sensor}
     logging.debug(f"getting datastream id {payload}")
-    resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
-    # resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+    #resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
+    resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
     # print(resp.json())
     logging.debug(f"response: {resp.json()} ")
 
@@ -105,7 +106,7 @@ def create_app(script_info=None):
     def post_solarinverter_data():
         try:
             data = request.get_json()
-            data = json.loads(data)
+            #data = json.loads(data)
             # print(data)
             logging.debug(f"post observation: {data}")
 
@@ -114,7 +115,10 @@ def create_app(script_info=None):
             thing = f"ViikkiSolar-{data['name']}"
             timestamp = data["timestamp"]
             dt_obj = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
-            timestamp_millisec = round(dt_obj.timestamp() * 1000)
+            phenomenon_timestamp_millisec = round(dt_obj.timestamp() * 1000)
+            dt_obj = datetime.utcnow()
+            result_timestamp_millisec = round(dt_obj.timestamp() * 1000)
+
 
             del data["name"]
             del data["timestamp"]
@@ -122,15 +126,15 @@ def create_app(script_info=None):
 
             for key, value in data.items():
                 sensor = key
-                # print(sensor)
+                # handle status status not 200 - if not raise error
                 ds_id = get_ds_id(thing, sensor)
                 if ds_id == -1:
                     logging.warning(f"no datastream id found for {thing} + {sensor}")
                 topic = f"{topic_prefix}"
                 observation = {
-                    "phenomenontime_begin": None,
+                    "phenomenontime_begin": phenomenon_timestamp_millisec,
                     "phenomenontime_end": None,
-                    "resulttime": timestamp_millisec,
+                    "resulttime": result_timestamp_millisec,
                     "result": f"{value}",
                     "resultquality": None,
                     "validtime_begin": None,
