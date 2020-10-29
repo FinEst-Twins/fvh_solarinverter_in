@@ -23,8 +23,8 @@ def get_ds_id(thing, sensor):
     """
     payload = {"thing": thing, "sensor": sensor}
     logging.debug(f"getting datastream id {payload}")
-    #resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
-    resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+    resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
+    #resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
     # print(resp.json())
     logging.debug(f"response: {resp.json()} ")
 
@@ -62,7 +62,7 @@ def create_app(script_info=None):
         try:
             data = request.get_json()
             #uncomment for prod
-            #data = json.loads(data)
+            data = json.loads(data)
             # print(data)
             logging.info(f"post observation: {data}")
 
@@ -104,12 +104,12 @@ def create_app(script_info=None):
                 payload = {"topic": topic, "observation": observation}
 
                 headers = {"Content-type": "application/json"}
-                # resp = requests.post(
-                #     "http://st_observations_api:4888/observation",
-                #     data=json.dumps(payload),
-                #     headers=headers,
-                # )
-                resp = requests.post("http://host.docker.internal:1337/observation", data=json.dumps(payload), headers=headers)
+                resp = requests.post(
+                    "http://st_observations_api:4888/observation",
+                    data=json.dumps(payload),
+                    headers=headers,
+                )
+                #resp = requests.post("http://host.docker.internal:1337/observation", data=json.dumps(payload), headers=headers)
 
             return success_response_object, success_code
 
