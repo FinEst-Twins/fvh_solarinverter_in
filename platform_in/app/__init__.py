@@ -106,9 +106,9 @@ def create_app(script_info=None):
     def post_solarinverter_data():
         try:
             data = request.get_json()
-            #data = json.loads(data)
+            data = json.loads(data)
             # print(data)
-            logging.debug(f"post observation: {data}")
+            logging.info(f"post observation: {data}")
 
             topic_prefix = "finest-observations-viikkisolar"
 
