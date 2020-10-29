@@ -52,8 +52,8 @@ def get_ds_id(thing, sensor):
     """
     payload = {"thing": thing, "sensor": sensor}
     logging.debug(f"getting datastream id {payload}")
-    #resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
-    resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+    resp = requests.get("http://st_datastreams_api:4999/datastream", params=payload)
+    #resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
     # print(resp.json())
     logging.debug(f"response: {resp.json()} ")
 
