@@ -143,7 +143,7 @@ def create_app(script_info=None):
                     "datastream_id": ds_id,
                     "featureofintrest_link": None,
                 }
-
+                logging.info(observation)
                 kafka_avro_produce(avroProducer, topic, observation)
             return success_response_object, success_code
 
