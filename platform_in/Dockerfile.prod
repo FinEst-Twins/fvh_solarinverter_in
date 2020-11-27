@@ -27,4 +27,5 @@ RUN addgroup --system appuser && adduser --system --no-create-home --group appus
 RUN chown -R appuser:appuser /project
 
 USER appuser
+CMD gunicorn --bind 0.0.0.0:5000 manage:app
 
