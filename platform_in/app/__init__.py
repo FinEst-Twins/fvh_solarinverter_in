@@ -67,7 +67,7 @@ def create_app(script_info=None):
             # print(data)
             # ogging.info(f"post observation: {data}")
 
-            topic_prefix = "finest-observations-viikkisolar"
+            topic_prefix = "finest.sensorthings.observations.viikkisolar"
 
             thing = f"ViikkiSolar-{data['name']}"
             timestamp = data["timestamp"]
