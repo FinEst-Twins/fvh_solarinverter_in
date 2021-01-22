@@ -9,7 +9,7 @@ from datetime import timezone
 import requests
 
 logging.basicConfig(level=logging.INFO)
-elastic_apm = ElasticAPM()
+#elastic_apm = ElasticAPM()
 
 success_response_object = {"status": "success"}
 success_code = 202
@@ -27,7 +27,7 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # set up extensions
-    elastic_apm.init_app(app)
+    #elastic_apm.init_app(app)
     # db.init_app(app)
 
     def get_ds_id(thing, sensor):
@@ -65,7 +65,7 @@ def create_app(script_info=None):
             # uncomment for prod
             data = json.loads(data)
             # print(data)
-            # ogging.info(f"post observation: {data}")
+            logging.info(f"post observation: {data}")
 
             topic_prefix = "finest.sensorthings.observations.viikkisolar"
 
