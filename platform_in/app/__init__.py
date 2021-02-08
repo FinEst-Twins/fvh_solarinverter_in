@@ -16,6 +16,7 @@ success_code = 202
 failure_response_object = {"status": "failure"}
 failure_code = 400
 
+FOI_ID_VIIKKI = 2
 
 def create_app(script_info=None):
 
@@ -38,14 +39,17 @@ def create_app(script_info=None):
 
         payload = {"thing": thing, "sensor": sensor}
         logging.debug(f"getting datastream id {payload}")
-        resp = requests.get(app.config["DATASTREAMS_ENDPOINT"], params=payload)
-        # resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
-        logging.debug(f"response: {resp.json()} ")
 
         id = -1
-        ds = resp.json()["Datastreams"]
-        if len(ds) == 1:
-            id = ds[0]["datastream_id"]
+        try:
+            resp = requests.get(app.config["DATASTREAMS_ENDPOINT"], params=payload)
+            # resp = requests.get("http://host.docker.internal:1338/datastream", params=payload)
+            logging.debug(f"response: {resp.json()} ")
+            ds = resp.json()["Datastreams"]
+            if len(ds) == 1:
+                id = ds[0]["datastream_id"]
+        except Exception as e:
+            logging.error("Error fetching data stream", exc_info=e)
 
         return id
 
@@ -65,7 +69,7 @@ def create_app(script_info=None):
             # uncomment for prod
             data = json.loads(data)
             # print(data)
-            logging.info(f"post observation: {data}")
+            logging.debug(f"post observation: {data}")
 
             topic_prefix = "finest.sensorthings.observations.viikkisolar"
 
@@ -97,7 +101,7 @@ def create_app(script_info=None):
                     "validtime_end": None,
                     "parameters": None,
                     "datastream_id": ds_id,
-                    "featureofintrest_link": None,
+                    "featureofinterest_id": FOI_ID_VIIKKI,
                 }
                 # logging.info(observation)
 
