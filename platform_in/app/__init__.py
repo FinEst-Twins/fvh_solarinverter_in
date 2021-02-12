@@ -8,7 +8,7 @@ from datetime import datetime
 from datetime import timezone
 import requests
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 #elastic_apm = ElasticAPM()
 
 success_response_object = {"status": "success"}
