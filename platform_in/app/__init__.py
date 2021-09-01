@@ -7,9 +7,16 @@ import json
 from datetime import datetime
 from datetime import timezone
 import requests
+import sentry_sdk
+
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+if os.getenv("SENTRY_DSN"):
+    sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
 
 logging.basicConfig(level=logging.INFO)
-#elastic_apm = ElasticAPM()
+# elastic_apm = ElasticAPM()
 
 success_response_object = {"status": "success"}
 success_code = 202
@@ -17,6 +24,7 @@ failure_response_object = {"status": "failure"}
 failure_code = 400
 
 FOI_ID_VIIKKI = 2
+
 
 def create_app(script_info=None):
 
@@ -28,8 +36,8 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # set up extensions
-    #elastic_apm.init_app(app)
-    # db.init_app(app)
+    # elastic_apm.init_app(app)
+
 
     def get_ds_id(thing, sensor):
         # """
@@ -61,6 +69,10 @@ def create_app(script_info=None):
     @app.route("/")
     def hello_world():
         return jsonify(health="ok")
+
+    @app.route("/debug-sentry")
+    def trigger_error():
+        division_by_zero = 1 / 0
 
     @app.route("/viikkisolar/observation", methods=["POST"])
     def post_solarinverter_data():

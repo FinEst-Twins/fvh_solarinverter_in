@@ -7,3 +7,4 @@ Flask-Security
 gunicorn
 pytest
 requests
+sentry-sdk[flask]
