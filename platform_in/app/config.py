@@ -1,7 +1,6 @@
 import os
 import logging
 
-logging.basicConfig(level=logging.INFO)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -22,6 +21,13 @@ class Config(object):
 
     OBSERVATIONS_ENDPOINT = get_env_variable("OBSERVATIONS_ENDPOINT")
     DATASTREAMS_ENDPOINT = get_env_variable("DATASTREAMS_ENDPOINT")
+
+    ll = get_env_variable("LOG_LEVEL")
+    try:
+
+        LOG_LEVEL = {0: logging.ERROR, 1: logging.WARN, 2: logging.INFO}[int(ll)]
+    except KeyError:
+        LOG_LEVEL = logging.DEBUG
 
     ELASTIC_APM = {
         "SERVICE_NAME": get_env_variable("ELASTIC_SERVICE_NAME"),

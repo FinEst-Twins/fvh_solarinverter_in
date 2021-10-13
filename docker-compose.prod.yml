@@ -12,9 +12,7 @@ services:
     env_file:
       - var.env
     environment:
-      - FLASK_APP=app/__init__.py
-      - FLASK_ENV=production
-      - APP_SETTINGS=app.config.ProductionConfig
+      - LOG_LEVEL=3
 
   nginx:
     build: ./nginx
