@@ -11,8 +11,6 @@ services:
       - 5003
     env_file:
       - var.env
-    environment:
-      - LOG_LEVEL=3
 
   nginx:
     build: ./nginx

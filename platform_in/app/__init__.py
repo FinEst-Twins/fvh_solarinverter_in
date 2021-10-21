@@ -14,7 +14,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 if os.getenv("SENTRY_DSN"):
     sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-# elastic_apm = ElasticAPM()
+elastic_apm = ElasticAPM()
 
 success_response_object = {"status": "success"}
 success_code = 202
@@ -37,7 +37,7 @@ def create_app(script_info=None):
     logging.getLogger().setLevel(app.config["LOG_LEVEL"])
 
     # set up extensions
-    # elastic_apm.init_app(app)
+    elastic_apm.init_app(app)
 
 
     def get_ds_id(thing, sensor):
