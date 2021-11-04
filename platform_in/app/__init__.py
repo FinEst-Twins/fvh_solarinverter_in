@@ -39,7 +39,6 @@ def create_app(script_info=None):
     # set up extensions
     elastic_apm.init_app(app)
 
-
     def get_ds_id(thing, sensor):
         # """
         # requests the datastream id corresponding to the thing and sensor links given
