@@ -81,10 +81,18 @@ def create_app(script_info=None):
     @app.route("/viikkisolar/observation", methods=["POST"])
     def post_solarinverter_data():
         try:
+            headers = {"Content-type": "application/json"}
             data = request.get_json()
             # uncomment for prod
             data = json.loads(data)
-            # print(data)
+            try:
+                resp_temp = requests.post(
+                    app.config["NEW_ENDPOINT"],
+                    data=json.dumps(data),
+                    headers=headers,
+                )
+            except Exception as e:
+                logging.error(f"{e}")
             logging.debug(f"post observation: {data}")
 
             topic_prefix = "finest.sensorthings.observations.viikkisolar"
@@ -123,7 +131,6 @@ def create_app(script_info=None):
 
                 payload = {"topic": topic, "observation": observation}
 
-                headers = {"Content-type": "application/json"}
                 resp = requests.post(
                     app.config["OBSERVATIONS_ENDPOINT"],
                     data=json.dumps(payload),
